@@ -3,7 +3,7 @@ import authRoutes from './routes/authRoutes';
 
 import sequelize from './models';
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({ logger: true, maxParamLength: 1000 });
 
 // Register routes
 fastify.register(authRoutes);

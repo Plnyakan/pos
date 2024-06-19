@@ -5,6 +5,7 @@ class User extends Model {
     public id!: number;
     public email!: string;
     public password!: string;
+    public isVerified!: boolean;
 }
 
 User.init({
@@ -21,6 +22,10 @@ User.init({
     password: {
         type: DataTypes.STRING(255),
         allowNull: false
+    },
+    isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false 
     }
 }, {
     sequelize,

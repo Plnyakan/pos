@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import validator from 'validator';
 import User from '../models/user';
+import { sendVerificationEmail } from '../services/emailService'; 
 
 export const signUp = async (request: FastifyRequest, reply: FastifyReply) => {
     const { email, password } = request.body as { email: string; password: string };
@@ -17,11 +18,21 @@ export const signUp = async (request: FastifyRequest, reply: FastifyReply) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = jwt.sign({ email }, process.env.JWT_SECRET!, { expiresIn: '1d' });
+
     try {
-        const user = await User.create({ email, password: hashedPassword });
-        reply.status(201).send("User:"+ user.email+ " has been created successfully");
-    } catch (error) {
-        reply.status(500).send({ error: 'Email already exists.' });
+        const user = await User.create({ email, password: hashedPassword, isVerified: false });
+
+        console.log('verification token',verificationToken)
+
+        await sendVerificationEmail(email, verificationToken);
+
+        reply.status(201).send(`User ${user.email} has been created successfully. Please verify your email.`);
+    } catch (error:any) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return reply.status(400).send({ error: 'Email already exists.' });
+        }
+        reply.status(500).send({ error: 'Something went wrong.' });
     }
 };
 
@@ -40,4 +51,29 @@ export const logIn = async (request: FastifyRequest, reply: FastifyReply) => {
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
     reply.send({ token });
+};
+
+
+export const verifyEmail = async (request: FastifyRequest, reply: FastifyReply) => {
+    const { token } = request.params as { token: string };
+
+    try {
+        const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
+        console.log('token', decodedToken);
+
+        const user = await User.findOne({ where: { email: decodedToken.email } });
+        console.log('user', user);
+        if (!user) {
+            
+            return reply.status(404).send({ error: 'User not found.' });
+        }
+
+
+        user.isVerified = true;
+        await user.save();
+
+        reply.send({ message: 'Email verified successfully.' });
+    } catch (error) {
+        reply.status(401).send({ error: 'Invalid or expired token.' });
+    }
 };
