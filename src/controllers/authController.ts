@@ -2,10 +2,19 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import validator from 'validator';
 import User from '../models/user';
 
 export const signUp = async (request: FastifyRequest, reply: FastifyReply) => {
     const { email, password } = request.body as { email: string; password: string };
+
+    if (!validator.isEmail(email)) {
+        return reply.status(400).send({ error: 'Invalid email format.' });
+    }
+
+    if (password.length < 8) {
+        return reply.status(400).send({ error: 'Password must be at least 8 characters long.' });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
