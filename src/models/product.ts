@@ -7,6 +7,16 @@ class Product extends Model {
     public price!: number;
     public description!: string;
     public quantity!: number;
+    public upsells!: number;
+
+    public static associate() {
+        Product.belongsToMany(Product, {
+            as: 'upsells',
+            through: 'ProductUpsells',
+            foreignKey: 'product_id',
+            otherKey: 'upsell_product_id'
+        });
+    }
 }
 
 Product.init({
@@ -36,5 +46,7 @@ Product.init({
     tableName: 'products',
     timestamps: false
 });
+
+Product.associate();
 
 export default Product;

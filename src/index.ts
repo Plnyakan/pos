@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
+import upsellRoutes from './routes/upsellRoutes';
 
 import sequelize from './models';
 
@@ -9,6 +10,7 @@ const fastify = Fastify({ logger: true, maxParamLength: 1000 });
 // Register routes
 fastify.register(authRoutes);
 fastify.register(productRoutes);
+fastify.register(upsellRoutes);
 
 const PORT = process.env.PORT || 3000;
 
