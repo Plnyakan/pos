@@ -8,8 +8,10 @@ const fastify = Fastify({ logger: true, maxParamLength: 1000 });
 // Register routes
 fastify.register(authRoutes);
 
+const PORT = process.env.PORT || 3000;
+
 sequelize.sync().then(() => {
-    fastify.listen(3000, (err, address) => {
+    fastify.listen(PORT, '0.0.0.0',(err, address) => {
         if (err) {
             fastify.log.error(err);
             process.exit(1);

@@ -64,10 +64,9 @@ export const verifyEmail = async (request: FastifyRequest, reply: FastifyReply) 
         const user = await User.findOne({ where: { email: decodedToken.email } });
         console.log('user', user);
         if (!user) {
-            
+
             return reply.status(404).send({ error: 'User not found.' });
         }
-
 
         user.isVerified = true;
         await user.save();
