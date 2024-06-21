@@ -2,10 +2,9 @@ import request from 'supertest';
 import startServer, { fastify } from '../src/index';
 import Product from '../src/models/product';
 
-// Mock the auth middleware
 jest.mock('../src/middlewares/authMiddleware', () => ({
     verifyToken: jest.fn((request, reply, done) => {
-        request.user = { id: 1 }; // Mocked user object
+        request.user = { id: 1 }; 
         done();
     }),
 }));
@@ -15,13 +14,13 @@ jest.mock('../src/models/product');
 describe('Product Management', () => {
     beforeAll(async () => {
         if (!fastify.server.listening) {
-            await startServer(); // Start the server if not already started
+            await startServer(); 
         }
-        await fastify.ready(); // Ensure the server is ready
+        await fastify.ready(); 
     });
 
     afterAll(async () => {
-        await fastify.close(); // Close the server
+        await fastify.close(); 
     });
 
     describe('Create Product', () => {
@@ -33,14 +32,14 @@ describe('Product Management', () => {
                 quantity: 10
             };
 
-            // Mock the Product.create method to return the product data
+  
             (Product.create as jest.Mock).mockResolvedValue(productData);
 
             const response = await request(fastify.server)
                 .post('/products')
                 .send(productData);
 
-            console.log('Create Product Response:', response.body); // Debugging: log the response body
+            console.log('Create Product Response:', response.body); 
 
             expect(response.status).toBe(201);
             expect(response.body.product_name).toBe(productData.product_name);
@@ -62,7 +61,7 @@ describe('Product Management', () => {
                 .post('/products')
                 .send(productData);
 
-            console.log('Create Product Error Response:', response.body); // Debugging: log the response body
+            console.log('Create Product Error Response:', response.body); 
 
             expect(response.status).toBe(500);
             expect(response.body.error).toBe('Failed to create product.');
@@ -76,14 +75,14 @@ describe('Product Management', () => {
                 { id: 2, product_name: 'Test Product 2', price: 200, description: 'Description 2', quantity: 20 }
             ];
 
-            // Mock the Product.findAll method to return the products array
+ 
             (Product.findAll as jest.Mock).mockResolvedValue(products);
 
             const response = await request(fastify.server)
                 .get('/products')
                 .send();
 
-            console.log('Get Products Response:', response.body); // Debugging: log the response body
+            console.log('Get Products Response:', response.body); 
 
             expect(response.status).toBe(200);
             if (response.body.length > 0) {
@@ -103,7 +102,7 @@ describe('Product Management', () => {
                 .get('/products')
                 .send();
 
-            console.log('Get Products Error Response:', response.body); // Debugging: log the response body
+            console.log('Get Products Error Response:', response.body); 
 
             expect(response.status).toBe(500);
             expect(response.body.error).toBe('Failed to retrieve products.');
@@ -125,24 +124,24 @@ describe('Product Management', () => {
                 price: 100, 
                 description: 'Old Description', 
                 quantity: 10,
-                save: jest.fn().mockResolvedValue(productData) // Mock save method to resolve with updated product
+                save: jest.fn().mockResolvedValue(productData) 
             };
 
-            // Mock the Product.findByPk method to return a product
+        
             (Product.findByPk as jest.Mock).mockResolvedValue(mockProduct);
 
             const response = await request(fastify.server)
                 .put('/products/1')
                 .send(productData);
 
-            console.log('Update Product Response:', response.body); // Debugging: log the response body
+            console.log('Update Product Response:', response.body);
 
             expect(response.status).toBe(200);
             expect(response.body.product_name).toBe(productData.product_name);
         });
 
         it('should return 404 if the product is not found', async () => {
-            // Mock the Product.findByPk method to return null (product not found)
+         
             (Product.findByPk as jest.Mock).mockResolvedValue(null);
 
             const productData = {
@@ -156,7 +155,7 @@ describe('Product Management', () => {
                 .put('/products/999')
                 .send(productData);
 
-            console.log('Update Product Not Found Response:', response.body); // Debugging: log the response body
+            console.log('Update Product Not Found Response:', response.body);
 
             expect(response.status).toBe(404);
             expect(response.body.error).toBe('Product not found.');
@@ -178,17 +177,17 @@ describe('Product Management', () => {
                 quantity: 10,
                 save: jest.fn(() => {
                     throw new Error('Mocked error');
-                }) // Mock save method to throw an error
+                }) 
             };
 
-            // Mock the Product.findByPk method to return a product
+           
             (Product.findByPk as jest.Mock).mockResolvedValue(mockProduct);
 
             const response = await request(fastify.server)
                 .put('/products/1')
                 .send(productData);
 
-            console.log('Update Product Error Response:', response.body); // Debugging: log the response body
+            console.log('Update Product Error Response:', response.body); 
 
             expect(response.status).toBe(500);
             expect(response.body.error).toBe('Failed to update product.');
@@ -203,7 +202,7 @@ describe('Product Management', () => {
                 destroy: jest.fn().mockResolvedValue(undefined) 
             };
 
-            // Mock the Product.findByPk method to return a product
+         
             (Product.findByPk as jest.Mock).mockResolvedValue(mockProduct);
 
             const response = await request(fastify.server)
@@ -211,14 +210,14 @@ describe('Product Management', () => {
                 .set('Authorization', 'Bearer fake-token')
                 .send();
 
-            console.log('Delete Product Response:', response.body); // Debugging: log the response body
+            console.log('Delete Product Response:', response.body); 
 
             expect(response.status).toBe(200);
             expect(response.body.message).toBe('Product deleted successfully.');
         });
 
         it('should return 404 if the product is not found', async () => {
-            // Mock the Product.findByPk method to return null (product not found)
+           
             (Product.findByPk as jest.Mock).mockResolvedValue(null);
 
             const response = await request(fastify.server)
@@ -226,7 +225,7 @@ describe('Product Management', () => {
                 .set('Authorization', 'Bearer fake-token')
                 .send();
 
-            console.log('Delete Product Not Found Response:', response.body); // Debugging: log the response body
+            console.log('Delete Product Not Found Response:', response.body); 
 
             expect(response.status).toBe(404);
             expect(response.body.error).toBe('Product not found.');
@@ -238,10 +237,10 @@ describe('Product Management', () => {
                 name: 'Test Product', 
                 destroy: jest.fn(() => {
                     throw new Error('Mocked error');
-                }) // Mock destroy method to throw an error
+                }) 
             };
 
-            // Mock the Product.findByPk method to return a product
+           
             (Product.findByPk as jest.Mock).mockResolvedValue(mockProduct);
 
             const response = await request(fastify.server)
@@ -249,7 +248,7 @@ describe('Product Management', () => {
                 .set('Authorization', 'Bearer fake-token')
                 .send();
 
-            console.log('Delete Product Error Response:', response.body); // Debugging: log the response body
+            console.log('Delete Product Error Response:', response.body); 
 
             expect(response.status).toBe(500);
             expect(response.body.error).toBe('Failed to delete product.');

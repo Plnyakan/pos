@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
 import upsellRoutes from './routes/upsellRoutes';
+import transactionRoutes from './routes/transactionRoutes';
 import sequelize from './models'; 
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -13,6 +14,7 @@ async function startServer() {
     fastify.register(authRoutes);
     fastify.register(productRoutes);
     fastify.register(upsellRoutes);
+    fastify.register(transactionRoutes);
 
     try {
         await sequelize.sync(); 
