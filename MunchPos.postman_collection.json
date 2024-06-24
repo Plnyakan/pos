@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "871309b3-5d9b-4226-ba9a-5ab9fdc9cdb0",
+		"name": "MunchPos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25640027"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "verifyEmail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/verify/{{token}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"verify",
+								"{{token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"pleasure@syked.co.za\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/signup",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"pleasure@syked.co.za\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/login",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "createProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple a day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/products",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/products",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple a day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/products/{{productId}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/products/{{productId}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Upsell Products",
+			"item": [
+				{
+					"name": "createProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple a day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/products/{{productId}}/upsells/{{upsellProductId}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}",
+								"upsells",
+								"{{upsellProductId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/products/{{productId}}/upsells",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}",
+								"upsells"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/products/{{productId}}/upsells/{{upsellProductId}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}",
+								"upsells",
+								"{{upsellProductId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sales and Transactions",
+			"item": [
+				{
+					"name": "createTransaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 2,\r\n            \"quantity\": 4,\r\n            \"upsell_product_ids\": [2, 5]\r\n        },\r\n        {\r\n            \"product_id\": 4,\r\n            \"quantity\": 1,\r\n            \"upsell_product_ids\": [2, 5]\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{dev_url}}/transactions",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{dev_url}}/transactions/{{transactionId}}",
+							"protocol": "http",
+							"host": [
+								"{{dev_url}}"
+							],
+							"path": [
+								"transactions",
+								"{{transactionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBsZWFzdXJlQHN5a2VkLmNvLnphIiwiaWF0IjoxNzE4ODI2OTQ0LCJleHAiOjE3MTg5MTMzNDR9.B5EGXcidxGSItASjf3psONywK07_TA1B7-XVonnehrs"
+		},
+		{
+			"key": "productId",
+			"value": "1"
+		},
+		{
+			"key": "access_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxODg3MDgxMSwiZXhwIjoxNzE4ODc0NDExfQ.eK6nE2bjyjXbinJnP9BQe1G31iUBOZOZLii6QY12wpk"
+		},
+		{
+			"key": "upsellProductId",
+			"value": "2"
+		},
+		{
+			"key": "transactionId",
+			"value": "1"
+		}
+	]
+}
