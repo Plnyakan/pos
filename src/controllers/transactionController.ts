@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import Transaction from '../models/transaction';
 import Product from '../models/product';
 import ProductUpsell from '../models/productUpsell';
+import TransactionDetail from '../models/transactionDetail';
 
 export const createTransaction = async (request: FastifyRequest, reply: FastifyReply) => {
     const { products } = request.body as { products: Array<{ product_id: number; quantity: number; upsell_product_ids?: number[] }> };
@@ -9,6 +10,8 @@ export const createTransaction = async (request: FastifyRequest, reply: FastifyR
     try {
         const transactionDetails = [];
         let totalAmount = 0;
+
+        console.log('products', products);
 
         for (const item of products) {
             const { product_id, quantity, upsell_product_ids = [] } = item;
@@ -36,8 +39,11 @@ export const createTransaction = async (request: FastifyRequest, reply: FastifyR
             }
         }
 
+        const transaction = await Transaction.create({ total_amount: totalAmount });
 
-        const transaction = await Transaction.create({ total_amount: totalAmount, details: transactionDetails });
+        for (const detail of transactionDetails) {
+            await TransactionDetail.create({ transaction_id: transaction.transaction_id, ...detail });
+        }
 
         reply.status(201).send(transaction);
     } catch (error) {
@@ -45,6 +51,8 @@ export const createTransaction = async (request: FastifyRequest, reply: FastifyR
         reply.status(500).send({ error: 'Failed to create transaction.' });
     }
 };
+
+
 
 export const getTransaction = async (request: FastifyRequest, reply: FastifyReply) => {
     const { transactionId } = request.params as { transactionId: string };
@@ -60,3 +68,5 @@ export const getTransaction = async (request: FastifyRequest, reply: FastifyRepl
         reply.status(500).send({ error: 'Failed to retrieve transaction.' });
     }
 };
+
+

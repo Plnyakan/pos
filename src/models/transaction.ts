@@ -1,11 +1,15 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Association } from 'sequelize';
 import sequelize from './index';
+import TransactionDetail from './transactionDetail';
 
 class Transaction extends Model {
+    [x: string]: any;
     public transaction_id!: number;
-    public product_id!: number;
-    public quantity!: number;
     public total_amount!: number;
+
+    public static associations: {
+        details: Association<Transaction, TransactionDetail>;
+    };
 }
 
 Transaction.init({
@@ -13,14 +17,6 @@ Transaction.init({
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
-    },
-    product_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false
     },
     total_amount: {
         type: DataTypes.DECIMAL(10, 2),
@@ -30,6 +26,17 @@ Transaction.init({
     sequelize,
     tableName: 'transactions',
     timestamps: false
+});
+
+Transaction.hasMany(TransactionDetail, {
+    sourceKey: 'transaction_id',
+    foreignKey: 'transaction_id',
+    as: 'details'
+});
+
+TransactionDetail.belongsTo(Transaction, {
+    foreignKey: 'transaction_id',
+    as: 'transaction'
 });
 
 export default Transaction;
