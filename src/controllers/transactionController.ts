@@ -36,11 +36,9 @@ export const createTransaction = async (
       }
 
       if (product.quantity < quantity) {
-        return reply
-          .status(400)
-          .send({
-            error: `Insufficient stock for product with id ${product_id}.`,
-          });
+        return reply.status(400).send({
+          error: `Insufficient stock for product with id ${product_id}.`,
+        });
       }
 
       product.quantity -= quantity;
@@ -54,19 +52,15 @@ export const createTransaction = async (
       for (const upsellProductId of upsell_product_ids) {
         const upsellProduct = await Product.findByPk(upsellProductId);
         if (!upsellProduct) {
-          return reply
-            .status(404)
-            .send({
-              error: `Upsell product with id ${upsellProductId} not found.`,
-            });
+          return reply.status(404).send({
+            error: `Upsell product with id ${upsellProductId} not found.`,
+          });
         }
 
         if (upsellProduct.quantity < quantity) {
-          return reply
-            .status(400)
-            .send({
-              error: `Insufficient stock for upsell product with id ${upsellProductId}.`,
-            });
+          return reply.status(400).send({
+            error: `Insufficient stock for upsell product with id ${upsellProductId}.`,
+          });
         }
 
         upsellProduct.quantity -= quantity;
@@ -100,6 +94,7 @@ export const createTransaction = async (
 };
 
 // Function should return more details about the transations and products
+
 export const getTransaction = async (
   request: FastifyRequest,
   reply: FastifyReply
@@ -107,13 +102,42 @@ export const getTransaction = async (
   const { transactionId } = request.params as { transactionId: string };
 
   try {
-    const transaction = await Transaction.findByPk(transactionId);
+    const transaction = await Transaction.findByPk(transactionId, {
+      include: [
+        {
+          model: TransactionDetail,
+          as: "details",
+          include: [
+            {
+              model: Product,
+              attributes: ["product_name", "price"],
+            },
+          ],
+        },
+      ],
+    });
+
     if (!transaction) {
       return reply.status(404).send({ error: "Transaction not found." });
     }
 
-    reply.send(transaction);
+    const transactionDetails = transaction.details.map((detail: any) => ({
+      product_id: detail.product_id,
+      product_name: detail.Product.product_name,
+      quantity: detail.quantity,
+      price: detail.Product.price,
+      amount: detail.amount,
+    }));
+
+    const response = {
+      transaction_id: transaction.transaction_id,
+      total_amount: transaction.total_amount,
+      products: transactionDetails,
+    };
+
+    reply.send(response);
   } catch (error) {
+    console.error("Error retrieving transaction:", error);
     reply.status(500).send({ error: "Failed to retrieve transaction." });
   }
 };

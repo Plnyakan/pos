@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from './index';
+import Product from './product';
 
 class TransactionDetail extends Model {
     public transaction_detail_id!: number;
@@ -25,7 +26,11 @@ TransactionDetail.init({
     },
     product_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'products',
+            key: 'product_id'
+        }
     },
     quantity: {
         type: DataTypes.INTEGER,
@@ -40,5 +45,7 @@ TransactionDetail.init({
     tableName: 'transaction_details',
     timestamps: false
 });
+
+TransactionDetail.belongsTo(Product, { foreignKey: 'product_id' });
 
 export default TransactionDetail;
