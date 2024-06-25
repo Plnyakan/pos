@@ -15,10 +15,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/verify/{{token}}",
+							"raw": "http://{{user_url}}/verify/{{token}}",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{user_url}}"
 							],
 							"path": [
 								"verify",
@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"pleasure@syked.co.za\",\r\n    \"password\": \"12345678\"\r\n}",
+							"raw": "{\r\n    \"email\":\"pleasure.nyakane@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -43,10 +43,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{dev_url}}/signup",
+							"raw": "http://{{user_url}}/signup",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{user_url}}"
 							],
 							"path": [
 								"signup"
@@ -70,10 +70,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{dev_url}}/login",
+							"raw": "http://{{user_url}}/login",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{user_url}}"
 							],
 							"path": [
 								"login"
@@ -104,7 +104,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple a day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
+							"raw": "{\r\n    \"product_name\": \"watermelon\",\r\n    \"price\": 7,\r\n    \"description\": \"One Banana a day takes a doctor away\",\r\n    \"quantity\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -112,10 +112,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{dev_url}}/products",
+							"raw": "http://{{products_url}}/products",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{products_url}}"
 							],
 							"path": [
 								"products"
@@ -130,10 +130,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/products",
+							"raw": "http://{{products_url}}/products",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{products_url}}"
 							],
 							"path": [
 								"products"
@@ -159,7 +159,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple a day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
+							"raw": "{\r\n    \"product_name\": \"Apple\",\r\n    \"price\": 7,\r\n    \"description\": \"One Apple per day takes a doctor away\",\r\n    \"quantity\": 33\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -167,10 +167,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{dev_url}}/products/{{productId}}",
+							"raw": "http://{{products_url}}/products/{{productId}}",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{products_url}}"
 							],
 							"path": [
 								"products",
@@ -196,10 +196,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/products/{{productId}}",
+							"raw": "http://{{products_url}}/products/{{productId}}",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{products_url}}"
 							],
 							"path": [
 								"products",
@@ -215,7 +215,7 @@
 			"name": "Upsell Products",
 			"item": [
 				{
-					"name": "createProducts",
+					"name": "linkUpsellProducts",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -255,15 +255,15 @@
 					"response": []
 				},
 				{
-					"name": "getProducts",
+					"name": "getUpsellProducts",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/products/{{productId}}/upsells",
+							"raw": "http://{{upsells_url}}/products/{{productId}}/upsells",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{upsells_url}}"
 							],
 							"path": [
 								"products",
@@ -275,7 +275,7 @@
 					"response": []
 				},
 				{
-					"name": "deleteProducts",
+					"name": "removeUpsellProduct",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -290,10 +290,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/products/{{productId}}/upsells/{{upsellProductId}}",
+							"raw": "http://{{upsells_url}}/products/{{productId}}/upsells/{{upsellProductId}}",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{upsells_url}}"
 							],
 							"path": [
 								"products",
@@ -327,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 2,\r\n            \"quantity\": 4,\r\n            \"upsell_product_ids\": [2, 5]\r\n        },\r\n        {\r\n            \"product_id\": 4,\r\n            \"quantity\": 1,\r\n            \"upsell_product_ids\": [2, 5]\r\n        }\r\n    ]\r\n}\r\n",
+							"raw": "{\r\n    \"products\": [\r\n        {\r\n            \"product_id\": 3,\r\n            \"quantity\": 4,\r\n            \"upsell_product_ids\": [1, 5]\r\n        },\r\n        {\r\n            \"product_id\": 4,\r\n            \"quantity\": 1,\r\n            \"upsell_product_ids\": [1, 5]\r\n        }\r\n    ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -335,10 +335,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{dev_url}}/transactions",
+							"raw": "http://{{transaction_url}}/transactions",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{transaction_url}}"
 							],
 							"path": [
 								"transactions"
@@ -353,10 +353,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{dev_url}}/transactions/{{transactionId}}",
+							"raw": "http://{{transaction_url}}/transactions/{{transactionId}}",
 							"protocol": "http",
 							"host": [
-								"{{dev_url}}"
+								"{{transaction_url}}"
 							],
 							"path": [
 								"transactions",

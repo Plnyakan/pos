@@ -1,8 +1,32 @@
+version: '3.8'
 services:
-  app:
-    build: .
+  amqp:
+    image: rabbitmq:3-management-alpine
+    hostname: amqp
     ports:
-      - "3000:3000"
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+      - "5672"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+
+  consul:
+    image: consul:1.10.3
+    ports:
+      - "8500:8500"
+    command: ["agent", "-dev", "-client=0.0.0.0"]
+    networks:
+      - app-network
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
     environment:
       NODE_ENV: development
       JWT_SECRET: secret_token
@@ -14,8 +38,88 @@ services:
       SMTP_PORT: 465
       SMTP_PASSWORD: "wyukllmhqcuchmnn"
       SMTP_MAIL: "zerotickets.info@gmail.com"
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      RABBITMQ_HOST: amqp
+      RABBITMQ_PORT: 5672 
     depends_on:
+      - amqp
       - db
+    networks:
+      - app-network
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: development
+      JWT_SECRET: secret_token
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: pleasure749%
+      DB_NAME: munch_dev
+      SMTP_SERVICE: gmail
+      SMTP_PORT: 465
+      SMTP_PASSWORD: "wyukllmhqcuchmnn"
+      SMTP_MAIL: "zerotickets.info@gmail.com"
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      RABBITMQ_HOST: amqp
+      RABBITMQ_PORT: 5672 
+    depends_on:
+      - amqp
+      - db
+    networks:
+      - app-network
+
+  upsell-service:
+    build: ./upsell-service
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: development
+      JWT_SECRET: secret_token
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: pleasure749%
+      DB_NAME: munch_dev
+      SMTP_SERVICE: gmail
+      SMTP_PORT: 465
+      SMTP_PASSWORD: "wyukllmhqcuchmnn"
+      SMTP_MAIL: "zerotickets.info@gmail.com"
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      RABBITMQ_HOST: amqp
+    depends_on:
+      - amqp
+      - db
+    networks:
+      - app-network
+
+  transaction-service:
+    build: ./transaction-service
+    ports:
+      - "3004:3004"
+    environment:
+      NODE_ENV: development
+      JWT_SECRET: secret_token
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: pleasure749%
+      DB_NAME: munch_dev
+      SMTP_SERVICE: gmail
+      SMTP_PORT: 465
+      SMTP_PASSWORD: "wyukllmhqcuchmnn"
+      SMTP_MAIL: "zerotickets.info@gmail.com"
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      RABBITMQ_HOST: amqp
+    depends_on:
+      - amqp
+      - db
+    networks:
+      - app-network
 
   db:
     image: mysql:8
@@ -27,6 +131,12 @@ services:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - app-network
 
 volumes:
   db_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,9 @@
+# Node modules
+node_modules/
+
+# logs
+logs/
+
+.git
+*.md
+.cache
